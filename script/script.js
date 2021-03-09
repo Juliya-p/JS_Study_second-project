@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function(){
     'use strict';
-
+    //таймер
     function countTimer(deadline){
         let timerHours = document.querySelector('#timer-hours'),
             timerMinutes = document.querySelector('#timer-minutes'),
@@ -46,8 +46,64 @@ window.addEventListener('DOMContentLoaded', function(){
             }
         updateClock();
     }
-    countTimer('10 march 2021');
+    countTimer('11 march 2021');
     
     
-    //setInterval(countTimer, 1000, '12 march 2021');
+    //меню
+    const toggleMenu = () => {
+        const btnMenu = document.querySelector('.menu'),
+            menu = document.querySelector('menu'),
+            closeBtn = document.querySelector('.close-btn'),
+            menuItems = menu.querySelectorAll('ul>li');
+
+        const hadlerMenu = () => {
+            menu.classList.toggle('active-menu');
+        };
+        btnMenu.addEventListener('click', hadlerMenu);
+        closeBtn.addEventListener('click', hadlerMenu);
+        menuItems.forEach((elem) => elem.addEventListener('click', hadlerMenu));
+    };
+    toggleMenu();
+
+
+    //popup
+
+    const togglePopUp = () =>{
+        const popup = document.querySelector('.popup'),
+            popupBtn = document.querySelectorAll('.popup-btn'),
+            popupClose = document.querySelector('.popup-close'),
+            popupWindow = document.querySelector('.popup-content'),
+            width = document.documentElement.clientWidth;
+        
+        popupWindow.style.transform = `translate(-980px)`;
+        console.log(width);
+        let modalAnimiation = function(){
+            let count = -800;
+            setInterval(() => {
+                if(count < 0){                
+                    popupWindow.style.transform = `translate(${count}px)`;
+                    count = count + 40;
+                }    else {
+                    clearInterval(modalAnimiation);
+                }
+            }, 30);
+        };
+
+        popupBtn.forEach((elem) => {
+            elem.addEventListener('click', () => {
+                if(width > 768){
+                    popup.style.display = 'block';
+                    modalAnimiation();    
+                }   else {
+                    popup.style.display = 'block';
+                    popupWindow.style.transform = `translate(-30px)`;
+                }
+            });
+        });
+
+        popupClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    };
+    togglePopUp();
 });
