@@ -12,13 +12,13 @@ window.addEventListener('DOMContentLoaded', function(){
                 timeRemaining = (dateStop - dateNow) / 1000,
                 seconds = Math.floor(timeRemaining % 60),
                 minutes = Math.floor((timeRemaining / 60) % 60),
-                hours = Math.floor( timeRemaining / 60 / 60 ) % 24,
+                hours = Math.floor( timeRemaining / 60 / 60 ),
                 days = Math.floor(timeRemaining / 60 / 60 / 24);
+                console.log(dateNow);
             return{timeRemaining, hours, minutes, seconds};
         }
             function updateClock(){
                 let timer = getTimeRemaining();
-                let timerValues = Object.values(timer);
                 if(timer.timeRemaining > 0){
                     if (timer.hours < 10){
                         timerHours.textContent = '0' + timer.hours;
@@ -46,8 +46,8 @@ window.addEventListener('DOMContentLoaded', function(){
             }
         updateClock();
     }
-    countTimer('10 march 2021');
+    countTimer('19 march 2022');
     
     
-    //setInterval(countTimer, 1000, '12 march 2021');
+    //setInterval(countTimer, 1000, '12 march 2025');
 });
