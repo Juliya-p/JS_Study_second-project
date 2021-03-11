@@ -16,37 +16,23 @@ window.addEventListener('DOMContentLoaded', function(){
                 days = Math.floor(timeRemaining / 60 / 60 / 24);
             return{timeRemaining, hours, minutes, seconds};
         }
-            function updateClock(){
-                let timer = getTimeRemaining();
-                let timerValues = Object.values(timer);
-                if(timer.timeRemaining > 0){
-                    if (timer.hours < 10){
-                        timerHours.textContent = '0' + timer.hours;
-                        timerMinutes.textContent = timer.minutes;
-                        timerSeconds.textContent = timer.seconds;    
-                        }   else if (timer.minutes < 10){
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = '0' + timer.minutes;
-                            timerSeconds.textContent = timer.seconds;            
-                        }   else if (timer.seconds < 10){
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = timer.minutes;
-                            timerSeconds.textContent = '0' + timer.seconds;            
-                        }   else {
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = timer.minutes;
-                            timerSeconds.textContent = timer.seconds;    
-                        }
-                    setTimeout(updateClock, 1000);
-                }   else if (timer.timeRemaining <= 0){
-                    timerHours.textContent = '00';
-                    timerMinutes.textContent = '00';
-                    timerSeconds.textContent = '00';
-                }
+        function updateClock(){
+            let timer = getTimeRemaining();
+            const checkNumber = number => number < 10 ? `0${number}` : `${number}`;
+            if(timer.timeRemaining > 0){
+                timerHours.textContent = checkNumber(timer.hours);
+                timerMinutes.textContent = checkNumber(timer.minutes);
+                timerSeconds.textContent = checkNumber(timer.seconds);
+                setTimeout(updateClock, 1000);
+            }   else{
+                timerHours.textContent = '00';
+                timerMinutes.textContent = '00';
+                timerSeconds.textContent = '00';
             }
-        updateClock();
+        }
+    updateClock();
     }
-    countTimer('11 march 2021');
+    countTimer('12 march 2021');
     
     
     //меню
@@ -58,7 +44,7 @@ window.addEventListener('DOMContentLoaded', function(){
             menu.classList.toggle('active-menu');
             menu.addEventListener('click', (event) =>{
                 let target = event.target;
-                if (target.classList.contains('close-btn') || target.closest('ul')){
+                if (target.classList.contains('close-btn') || target.closest('ul>li>a')){
                     hadlerMenu();
                 }
             });
@@ -74,39 +60,44 @@ window.addEventListener('DOMContentLoaded', function(){
     const togglePopUp = () =>{
         const popUp = document.querySelector('.popup'),
             popUpBtn = document.querySelectorAll('.popup-btn'),
-            popUpWindow = document.querySelector('.popup-content'),
+            popUpWindow = document.querySelector('.popup-content');
+        let start = null,
             width = document.documentElement.clientWidth;
-        
-        let modalAnimiation = function(){
-            let count = -800;
+        function modalAnimate(timestamp) {
+            if (!start){
+                start = timestamp;
+            }
             popUpWindow.style.transform = `translate(-980px)`;
-            setInterval(() => {
-                if (count < -20){
-                    popUpWindow.style.transform = `translate(${count}px)`;
-                    count = count + 10;
-                }
-            }, 8);
-        };
+            let progress = timestamp - start - 1500;
+            popUpWindow.style.transform = `translateX(${Math.min(progress / 2, -30)}px)`;
+            if (progress < -100){
+                window.requestAnimationFrame(modalAnimate);
+            }   else {
+                start = null;
+            }
+        }
 
         popUpBtn.forEach((elem) => {
-            elem.addEventListener('click' , (event) =>{
-                let target = event.target;
-                console.log(target);
+            elem.addEventListener('click', () => {
+            width = document.documentElement.clientWidth;
                 if(width > 768){
                     popUp.style.display = 'block';
-                    modalAnimiation();    
+                    window.requestAnimationFrame(modalAnimate);
                 }   else {
                     popUp.style.display = 'block';
                     popUpWindow.style.transform = `translate(-30px)`;
                 }
             });
         });
-
-        popUp.addEventListener('click', (event) =>{
+        popUp.addEventListener('click', (event) => {
             let target = event.target;
-            console.log(target);
-            if (target.classList.contains('popup') || target.classList.contains('popup-close')){
+            if(target.classList.contains('popup-close')){
                 popUp.style.display = 'none';
+            }   else {
+                target = target.closest('.popup-content');
+                if(!target){
+                    popUp.style.display = 'none';
+                }    
             }
         });
     };
