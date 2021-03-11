@@ -16,33 +16,22 @@ window.addEventListener('DOMContentLoaded', function(){
                 days = Math.floor(timeRemaining / 60 / 60 / 24);
             return{timeRemaining, hours, minutes, seconds};
         }
-            function updateClock(){
-                let timer = getTimeRemaining();
-                let timerItems = [timer.hours, timer.minutes, timer.seconds];
-                let timerTextContent = [timerHours, timerMinutes, timerSeconds];
-                let timerCheck = () =>{
-                    timerItems.forEach((item, index) =>{
-                        if (item < 10){
-                            item.toString();
-                            item = '0' + item;
-                        }
-                        timerItems[index] = item;
-                    });
-                };
-                timerCheck();
-                if(timer.timeRemaining > 0){
-                    timerTextContent.forEach((item, index) =>{
-                        item.textContent = timerItems[index];
-                    });
-                    setTimeout(updateClock, 1000);
-                }   else{
-                    timerHours.textContent = '00';
-                    timerMinutes.textContent = '00';
-                    timerSeconds.textContent = '00';
-                }
+        function updateClock(){
+            let timer = getTimeRemaining();
+            const checkNumber = number => number < 10 ? `0${number}` : `${number}`;
+            if(timer.timeRemaining > 0){
+                timerHours.textContent = checkNumber(timer.hours);
+                timerMinutes.textContent = checkNumber(timer.minutes);
+                timerSeconds.textContent = checkNumber(timer.seconds);
+                setTimeout(updateClock, 1000);
+            }   else{
+                timerHours.textContent = '00';
+                timerMinutes.textContent = '00';
+                timerSeconds.textContent = '00';
             }
-        updateClock();
-    }
+        }
+    updateClock();
+}
     countTimer('12 march 2021');
     
     
