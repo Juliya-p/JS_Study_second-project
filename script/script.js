@@ -40,7 +40,7 @@ countTimer('12 march 2021');
         const btnMenu = document.querySelector('.menu'),
             menu = document.querySelector('menu'),
             closeBtn = document.querySelector('.close-btn'),
-            menuItems = menu.querySelectorAll('ul>li');
+            menuItems = menu.querySelectorAll('ul>li>a');
 
         const hadlerMenu = () => {
             menu.classList.toggle('active-menu');
@@ -57,29 +57,32 @@ countTimer('12 march 2021');
     const togglePopUp = () =>{
         const popUp = document.querySelector('.popup'),
             popUpBtn = document.querySelectorAll('.popup-btn'),
-            popUpClose = document.querySelector('.popup-close'),
-            popupWindow = document.querySelector('.popup-content'),
+            popUpWindow = document.querySelector('.popup-content');
+        let start = null,
             width = document.documentElement.clientWidth;
-        
-        popupWindow.style.transform = `translate(-980px)`;
-        let modalAnimiation = function(){
-            let count = -800;
-            setInterval(() => {
-                if (count < -20){
-                    popupWindow.style.transform = `translate(${count}px)`;
-                    count = count + 10;
-                }
-            }, 8);
-        };
+        function modalAnimate(timestamp) {
+            if (!start){
+                start = timestamp;
+            }
+            popUpWindow.style.transform = `translate(-980px)`;
+            let progress = timestamp - start - 1500;
+            popUpWindow.style.transform = `translateX(${Math.min(progress / 2, -30)}px)`;
+            if (progress < -100){
+                window.requestAnimationFrame(modalAnimate);
+            }   else {
+                start = null;
+            }
+        }
 
         popUpBtn.forEach((elem) => {
             elem.addEventListener('click', () => {
+            width = document.documentElement.clientWidth;
                 if(width > 768){
                     popUp.style.display = 'block';
-                    modalAnimiation();    
+                    window.requestAnimationFrame(modalAnimate);
                 }   else {
                     popUp.style.display = 'block';
-                    popupWindow.style.transform = `translate(-30px)`;
+                    popUpWindow.style.transform = `translate(-30px)`;
                 }
             });
         });
