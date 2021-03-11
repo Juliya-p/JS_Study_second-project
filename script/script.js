@@ -16,38 +16,24 @@ window.addEventListener('DOMContentLoaded', function(){
                 days = Math.floor(timeRemaining / 60 / 60 / 24);
             return{timeRemaining, hours, minutes, seconds};
         }
-            function updateClock(){
-                let timer = getTimeRemaining();
-                let timerValues = Object.values(timer);
-                if(timer.timeRemaining > 0){
-                    if (timer.hours < 10){
-                        timerHours.textContent = '0' + timer.hours;
-                        timerMinutes.textContent = timer.minutes;
-                        timerSeconds.textContent = timer.seconds;    
-                        }   else if (timer.minutes < 10){
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = '0' + timer.minutes;
-                            timerSeconds.textContent = timer.seconds;            
-                        }   else if (timer.seconds < 10){
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = timer.minutes;
-                            timerSeconds.textContent = '0' + timer.seconds;            
-                        }   else {
-                            timerHours.textContent = timer.hours;
-                            timerMinutes.textContent = timer.minutes;
-                            timerSeconds.textContent = timer.seconds;    
-                        }
-                    setTimeout(updateClock, 1000);
-                }   else if (timer.timeRemaining <= 0){
-                    timerHours.textContent = '00';
-                    timerMinutes.textContent = '00';
-                    timerSeconds.textContent = '00';
-                }
+        function updateClock(){
+            let timer = getTimeRemaining();
+            const checkNumber = number => number < 10 ? `0${number}` : `${number}`;
+            if(timer.timeRemaining > 0){
+                timerHours.textContent = checkNumber(timer.hours);
+                timerMinutes.textContent = checkNumber(timer.minutes);
+                timerSeconds.textContent = checkNumber(timer.seconds);
+                setTimeout(updateClock, 1000);
+            }   else{
+                timerHours.textContent = '00';
+                timerMinutes.textContent = '00';
+                timerSeconds.textContent = '00';
             }
-        updateClock();
-    }
-    countTimer('11 march 2021');
-    
+        }
+    updateClock();
+}
+countTimer('12 march 2021');
+
     
     //меню
     const toggleMenu = () => {
