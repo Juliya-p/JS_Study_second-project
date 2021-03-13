@@ -141,10 +141,11 @@ window.addEventListener('DOMContentLoaded', () => {
         const slide = document.querySelectorAll('.portfolio-item'),
             ulClass = document.querySelector('.portfolio-dots');
         const li = document.createElement('li');
+        li.setAttribute('class', 'dot dot-active');
         ulClass.appendChild(li);
-        li.setAttribute('class', 'dot');
-        for (let i = 0; i < slide.length - 1; i++) {
+        for (let i = 0; i < slide.length-1; i++) {
             const liClone = li.cloneNode();
+            liClone.setAttribute('class', 'dot');
             ulClass.appendChild(liClone);
         }
     };
